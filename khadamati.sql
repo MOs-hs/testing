@@ -2,6 +2,7 @@
 -- KHADAMATI DATABASE SCHEMA
 -- Complete database structure
 -- Last updated: December 17, 2024
+-- Uses IF NOT EXISTS to avoid errors on existing tables
 -- ========================================
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -20,7 +21,7 @@ USE `khadamati`;
 -- ========================================
 -- TABLE: user (base table for all users)
 -- ========================================
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
@@ -36,7 +37,7 @@ CREATE TABLE `user` (
 -- ========================================
 -- TABLE: admin
 -- ========================================
-CREATE TABLE `admin` (
+CREATE TABLE IF NOT EXISTS `admin` (
   `AdminID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   PRIMARY KEY (`AdminID`),
@@ -47,7 +48,7 @@ CREATE TABLE `admin` (
 -- ========================================
 -- TABLE: customer
 -- ========================================
-CREATE TABLE `customer` (
+CREATE TABLE IF NOT EXISTS `customer` (
   `CustomerID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   PRIMARY KEY (`CustomerID`),
@@ -58,7 +59,7 @@ CREATE TABLE `customer` (
 -- ========================================
 -- TABLE: provider
 -- ========================================
-CREATE TABLE `provider` (
+CREATE TABLE IF NOT EXISTS `provider` (
   `ProviderID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `Specialization` varchar(255) DEFAULT NULL,
@@ -72,7 +73,7 @@ CREATE TABLE `provider` (
 -- ========================================
 -- TABLE: category
 -- ========================================
-CREATE TABLE `category` (
+CREATE TABLE IF NOT EXISTS `category` (
   `CategoryID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `Description` text DEFAULT NULL,
@@ -80,7 +81,8 @@ CREATE TABLE `category` (
   KEY `idx_name` (`Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `category` (`CategoryID`, `Name`, `Description`) VALUES
+-- Insert default categories if table was just created
+INSERT IGNORE INTO `category` (`CategoryID`, `Name`, `Description`) VALUES
 (1, 'Plumbing', 'Water pipes, faucets, leaks'),
 (2, 'Electrical', 'Wiring, lights, fans'),
 (3, 'Cleaning', 'Home cleaning services'),
@@ -89,7 +91,7 @@ INSERT INTO `category` (`CategoryID`, `Name`, `Description`) VALUES
 -- ========================================
 -- TABLE: status
 -- ========================================
-CREATE TABLE `status` (
+CREATE TABLE IF NOT EXISTS `status` (
   `StatusID` int(11) NOT NULL AUTO_INCREMENT,
   `StatusName` varchar(100) NOT NULL,
   `Description` text DEFAULT NULL,
@@ -97,7 +99,8 @@ CREATE TABLE `status` (
   UNIQUE KEY `StatusName` (`StatusName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `status` (`StatusID`, `StatusName`, `Description`) VALUES
+-- Insert default statuses if table was just created
+INSERT IGNORE INTO `status` (`StatusID`, `StatusName`, `Description`) VALUES
 (1, 'Pending', 'New request waiting for provider'),
 (2, 'Accepted', 'Provider accepted the job'),
 (3, 'In Progress', 'Service is being performed'),
@@ -107,7 +110,7 @@ INSERT INTO `status` (`StatusID`, `StatusName`, `Description`) VALUES
 -- ========================================
 -- TABLE: service
 -- ========================================
-CREATE TABLE `service` (
+CREATE TABLE IF NOT EXISTS `service` (
   `ServiceID` int(11) NOT NULL AUTO_INCREMENT,
   `Title` varchar(255) NOT NULL,
   `Description` text DEFAULT NULL,
@@ -125,7 +128,7 @@ CREATE TABLE `service` (
 -- ========================================
 -- TABLE: serviceimage
 -- ========================================
-CREATE TABLE `serviceimage` (
+CREATE TABLE IF NOT EXISTS `serviceimage` (
   `ImageID` int(11) NOT NULL AUTO_INCREMENT,
   `ServiceID` int(11) DEFAULT NULL,
   `ImageURL` varchar(500) NOT NULL,
@@ -138,7 +141,7 @@ CREATE TABLE `serviceimage` (
 -- ========================================
 -- TABLE: servicerequest
 -- ========================================
-CREATE TABLE `servicerequest` (
+CREATE TABLE IF NOT EXISTS `servicerequest` (
   `RequestID` int(11) NOT NULL AUTO_INCREMENT,
   `CustomerID` int(11) NOT NULL,
   `ServiceID` int(11) NOT NULL,
@@ -160,7 +163,7 @@ CREATE TABLE `servicerequest` (
 -- ========================================
 -- TABLE: review
 -- ========================================
-CREATE TABLE `review` (
+CREATE TABLE IF NOT EXISTS `review` (
   `ReviewID` int(11) NOT NULL AUTO_INCREMENT,
   `RequestID` int(11) NOT NULL,
   `Rating` int(11) DEFAULT NULL CHECK (`Rating` between 1 and 5),
@@ -174,7 +177,7 @@ CREATE TABLE `review` (
 -- ========================================
 -- TABLE: payment
 -- ========================================
-CREATE TABLE `payment` (
+CREATE TABLE IF NOT EXISTS `payment` (
   `PaymentID` int(11) NOT NULL AUTO_INCREMENT,
   `RequestID` int(11) NOT NULL,
   `Amount` decimal(10,2) NOT NULL,
@@ -188,7 +191,7 @@ CREATE TABLE `payment` (
 -- ========================================
 -- TABLE: notification
 -- ========================================
-CREATE TABLE `notification` (
+CREATE TABLE IF NOT EXISTS `notification` (
   `NotificationID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `Title` varchar(255) NOT NULL,
@@ -205,7 +208,7 @@ CREATE TABLE `notification` (
 -- ========================================
 -- TABLE: certificate
 -- ========================================
-CREATE TABLE `certificate` (
+CREATE TABLE IF NOT EXISTS `certificate` (
   `CertificateID` int(11) NOT NULL AUTO_INCREMENT,
   `ProviderID` int(11) NOT NULL,
   `CertificateName` varchar(255) NOT NULL,
@@ -219,7 +222,7 @@ CREATE TABLE `certificate` (
 -- ========================================
 -- TABLE: reports
 -- ========================================
-CREATE TABLE `reports` (
+CREATE TABLE IF NOT EXISTS `reports` (
   `ReportID` int(11) NOT NULL AUTO_INCREMENT,
   `AdminID` int(11) NOT NULL,
   `ReportType` varchar(100) NOT NULL,
@@ -234,7 +237,7 @@ CREATE TABLE `reports` (
 -- ========================================
 -- TABLE: contact_message
 -- ========================================
-CREATE TABLE `contact_message` (
+CREATE TABLE IF NOT EXISTS `contact_message` (
   `MessageID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
   `Email` varchar(255) NOT NULL,
@@ -245,9 +248,9 @@ CREATE TABLE `contact_message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ========================================
--- TABLE: profile_change_request
+-- TABLE: profile_change_request (NEW)
 -- ========================================
-CREATE TABLE `profile_change_request` (
+CREATE TABLE IF NOT EXISTS `profile_change_request` (
   `RequestID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
   `RequestType` enum('customer', 'provider', 'admin') NOT NULL,
