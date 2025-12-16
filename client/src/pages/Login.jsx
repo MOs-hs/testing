@@ -192,13 +192,7 @@ const Login = () => {
               </p>
             </div>
 
-            {/* Demo Account Info */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30 relative z-10 animate-fade-in-up animation-delay-1000">
-              <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                <span className="font-bold text-gray-900 dark:text-white block mb-1">{t('auth.demoAccount')}</span>
-                {t('auth.demoCredentials')}
-              </p>
-            </div>
+
           </div>
 
           {/* Footer Text */}
