@@ -24,6 +24,19 @@ router.get('/', authenticate, authorize('admin'), userController.getAllUsers);
 router.delete('/:id', authenticate, authorize('admin'), userController.deleteUser);
 
 // Authenticated routes
+// Get current user's profile (self)
+router.get('/profile', authenticate, async (req, res, next) => {
+    try {
+        const User = require('../models/User');
+        const user = await User.findById(req.user.UserID);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json({ user });
+    } catch (error) {
+        next(error);
+    }
+});
 router.get('/:id', authenticate, userController.getUserById);
 router.put('/:id', authenticate, userUpdateValidation, userController.updateUser);
 router.put('/:id/password', authenticate, passwordUpdateValidation, userController.updatePassword);
