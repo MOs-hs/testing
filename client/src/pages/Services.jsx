@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar/Navbar';
 import Footer from '../components/Footer/Footer';
 import { useCurrency } from '../context/CurrencyContext';
 import { FiStar, FiMapPin, FiUser } from 'react-icons/fi';
-import { getServices, getCategories, getProviders, getUsers } from '../utils/mockData';
+import api from '../services/api';
 
 const Services = () => {
   const { formatPrice } = useCurrency();
@@ -14,16 +14,26 @@ const Services = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch categories from API
   useEffect(() => {
-    // Fetch categories from mock data
-    const allCategories = getCategories();
-    setCategories(allCategories);
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/categories');
+        setCategories(response.data.categories || []);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      }
+    };
+    fetchCategories();
   }, []);
 
+  // Fetch services from API
   useEffect(() => {
     const fetchServices = async () => {
       setLoading(true);
+      setError(null);
       try {
         const categoryParam = searchParams.get('category');
         const searchParam = searchParams.get('search');
@@ -40,36 +50,30 @@ const Services = () => {
           setSearchQuery('');
         }
 
-        // Mock filtering
-        let filteredServices = getServices();
-        const providers = getProviders();
-        const users = getUsers();
+        // Fetch from real API
+        const response = await api.get('/services');
+        let filteredServices = response.data.services || [];
 
-        // Join provider name
-        filteredServices = filteredServices.map(service => {
-          const provider = providers.find(p => p.provider_id === service.provider_id);
-          let providerName = 'Unknown Provider';
-          if (provider) {
-            const user = users.find(u => u.user_id === provider.user_id);
-            if (user) providerName = `${user.first_name} ${user.last_name}`;
-          }
-          return { ...service, ProviderName: providerName };
-        });
-
+        // Filter by category if selected
         if (categoryParam) {
-          filteredServices = filteredServices.filter(s => s.category_id === parseInt(categoryParam));
+          filteredServices = filteredServices.filter(
+            s => s.CategoryID === parseInt(categoryParam)
+          );
         }
 
+        // Filter by search query
         if (searchParam) {
+          const query = searchParam.toLowerCase();
           filteredServices = filteredServices.filter(s =>
-            s.title.toLowerCase().includes(searchParam.toLowerCase()) ||
-            s.description.toLowerCase().includes(searchParam.toLowerCase())
+            s.Title?.toLowerCase().includes(query) ||
+            s.Description?.toLowerCase().includes(query)
           );
         }
 
         setServices(filteredServices);
-      } catch (error) {
-        console.error('Error fetching services:', error);
+      } catch (err) {
+        console.error('Error fetching services:', err);
+        setError('Failed to load services');
       } finally {
         setLoading(false);
       }
@@ -92,10 +96,6 @@ const Services = () => {
     setSearchParams(newParams);
   };
 
-  const getServiceImage = (service) => {
-    return '/placeholder.jpg';
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar />
@@ -104,6 +104,7 @@ const Services = () => {
           {searchQuery ? 'Search Results' : 'All Services'}
         </h1>
 
+        {/* Category Filter */}
         <div className="mb-8">
           <div className="flex flex-wrap gap-4 justify-center">
             <button
@@ -117,43 +118,43 @@ const Services = () => {
             </button>
             {categories.map((category) => (
               <button
-                key={category.category_id}
-                onClick={() => handleCategoryFilter(category.category_id)}
-                className={`px-4 py-2 rounded-lg transition-colors ${selectedCategory === category.category_id
+                key={category.CategoryID}
+                onClick={() => handleCategoryFilter(category.CategoryID)}
+                className={`px-4 py-2 rounded-lg transition-colors ${selectedCategory === category.CategoryID
                   ? 'bg-[#0BA5EC] text-white'
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
               >
-                {category.name}
+                {category.Name}
               </button>
             ))}
           </div>
         </div>
 
+        {/* Loading State */}
         {loading ? (
           <div className="flex justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0BA5EC]"></div>
           </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-xl text-red-600 dark:text-red-400">{error}</p>
+          </div>
         ) : services.length > 0 ? (
           <div className="space-y-4">
             {services.map((service) => {
-              const rating = service.rating || 0;
-              const serviceImage = getServiceImage(service);
+              const rating = parseFloat(service.Rating) || 0;
 
               return (
                 <Link
-                  key={service.service_id}
-                  to={`/services/${service.service_id}`}
+                  key={service.ServiceID}
+                  to={`/services/${service.ServiceID}`}
                   className="block bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
                 >
                   <div className="flex flex-col md:flex-row">
                     {/* Service Image */}
-                    <div className="w-full md:w-64 h-48 md:h-auto flex-shrink-0">
-                      <img
-                        src={serviceImage}
-                        alt={service.title}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-full md:w-64 h-48 md:h-auto flex-shrink-0 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                      <span className="text-gray-400">No Image</span>
                     </div>
 
                     {/* Service Details */}
@@ -161,15 +162,15 @@ const Services = () => {
                       <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                         <div className="flex-1">
                           <h3 className="text-2xl font-bold dark:text-white mb-2">
-                            {service.title}
+                            {service.Title}
                           </h3>
                           <p className="text-gray-600 dark:text-gray-400 line-clamp-2 mb-4">
-                            {service.description}
+                            {service.Description}
                           </p>
                         </div>
                         <div className="text-left md:text-right mb-4 md:mb-0">
                           <div className="text-3xl font-bold text-[#0BA5EC] mb-2">
-                            {formatPrice(service.price || 0)}
+                            {formatPrice(service.Price || 0)}
                           </div>
                           <div className="flex items-center gap-1 text-yellow-500">
                             <FiStar className="h-5 w-5 fill-current" />
@@ -185,9 +186,7 @@ const Services = () => {
                         {service.ProviderName && (
                           <div className="flex items-center gap-2">
                             <FiUser className="h-4 w-4" />
-                            <span>
-                              {service.ProviderName}
-                            </span>
+                            <span>{service.ProviderName}</span>
                           </div>
                         )}
                         <div className="flex items-center gap-2">
@@ -204,7 +203,7 @@ const Services = () => {
         ) : (
           <div className="text-center py-12">
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              No results found
+              No services found
             </p>
           </div>
         )}
