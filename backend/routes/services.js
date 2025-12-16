@@ -23,6 +23,6 @@ router.get('/provider/:providerId', serviceController.getServicesByProvider);
 // Provider only routes
 router.post('/', authenticate, authorize('provider'), serviceValidation, serviceController.createService);
 router.put('/:id', authenticate, authorize('provider'), serviceValidation, serviceController.updateService);
-router.delete('/:id', authenticate, authorize('provider'), serviceController.deleteService);
+router.delete('/:id', authenticate, authorize('provider', 'admin'), serviceController.deleteService);
 
 module.exports = router;
