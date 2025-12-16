@@ -104,7 +104,7 @@ exports.updateService = async (req, res, next) => {
     }
 };
 
-// Delete service (provider only - own services)
+// Delete service (provider only - own services, admin - any service)
 exports.deleteService = async (req, res, next) => {
     try {
         const service = await Service.findById(req.params.id);
@@ -112,8 +112,15 @@ exports.deleteService = async (req, res, next) => {
             return res.status(404).json({ error: 'Service not found' });
         }
 
+        // Admins can delete any service
+        if (req.user.Role === 'admin') {
+            await Service.delete(req.params.id);
+            return res.json({ message: 'Service deleted successfully' });
+        }
+
+        // Providers can only delete their own services
         const provider = await Provider.findByUserId(req.user.UserID);
-        if (service.ProviderID !== provider.ProviderID) {
+        if (!provider || service.ProviderID !== provider.ProviderID) {
             return res.status(403).json({ error: 'You can only delete your own services' });
         }
 
