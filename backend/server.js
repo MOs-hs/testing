@@ -29,6 +29,7 @@ const notificationRoutes = require('./routes/notifications');
 const providerRoutes = require('./routes/providers');
 const adminRoutes = require('./routes/admin');
 const contactRoutes = require('./routes/contactRoutes');
+const profileChangeRequestRoutes = require('./routes/profileChangeRequests');
 
 // Import error handler
 const errorHandler = require('./middleware/errorHandler');
@@ -123,6 +124,7 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/providers', providerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/profile-change-requests', profileChangeRequestRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
