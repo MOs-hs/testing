@@ -1,82 +1,180 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { updateUser } from '../../utils/mockData';
+import api from '../../services/api';
 
 const Profile = () => {
-  const { user, updateUser: updateAuthUser } = useAuth();
-
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
-    first_name: user?.first_name || '',
-    last_name: user?.last_name || '',
-    email: user?.email || '',
-    phone: user?.phone || '',
+    name: '',
+    email: '',
+    phone: '',
   });
-
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState(null);
+  const [message, setMessage] = useState({ type: '', text: '' });
 
-  const handleProfileUpdate = (e) => {
-    e.preventDefault();
-    updateUser(user.user_id, formData);
-    updateAuthUser({ ...user, ...formData });
-    alert('Profile updated successfully');
+  useEffect(() => {
+    fetchProfile();
+    checkPendingRequest();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await api.get('/users/profile');
+      const userData = response.data.user || response.data;
+      setFormData({
+        name: userData.Name || '',
+        email: userData.Email || '',
+        phone: userData.Phone || '',
+      });
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handlePasswordChange = (e) => {
+  const checkPendingRequest = async () => {
+    try {
+      const response = await api.get('/profile-change-requests/my-requests');
+      const requests = response.data.requests || [];
+      const pending = requests.find(r => r.Status === 'pending');
+      setPendingRequest(pending || null);
+    } catch (error) {
+      console.error('Error checking pending requests:', error);
+    }
+  };
+
+  const handleProfileUpdate = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      await api.post('/profile-change-requests', formData);
+      setMessage({
+        type: 'success',
+        text: 'Change request submitted! Awaiting admin approval.'
+      });
+      checkPendingRequest();
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.error || 'Failed to submit change request'
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleCancelRequest = async () => {
+    if (!pendingRequest) return;
+
+    try {
+      await api.delete(`/profile-change-requests/${pendingRequest.RequestID}`);
+      setPendingRequest(null);
+      setMessage({ type: 'success', text: 'Change request cancelled' });
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.error || 'Failed to cancel request'
+      });
+    }
+  };
+
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    setMessage({ type: '', text: '' });
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('Passwords do not match');
+      setMessage({ type: 'error', text: 'Passwords do not match' });
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      alert('Password must be at least 6 characters');
+      setMessage({ type: 'error', text: 'Password must be at least 6 characters' });
       return;
     }
 
-    // In real app, verify current password first
-    alert('Password changed successfully');
-    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    try {
+      await api.put('/users/password', {
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword
+      });
+      setMessage({ type: 'success', text: 'Password changed successfully' });
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.error || 'Failed to change password'
+      });
+    }
   };
 
   const inputClass =
     'w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0BA5EC] dark:bg-gray-700 dark:text-white';
 
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0BA5EC]"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold dark:text-white">Profile</h1>
+
+      {/* Message */}
+      {message.text && (
+        <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+          {message.text}
+        </div>
+      )}
+
+      {/* Pending Request Notice */}
+      {pendingRequest && (
+        <div className="p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg border border-yellow-300 dark:border-yellow-700">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="font-medium text-yellow-800 dark:text-yellow-400">
+                You have a pending profile change request
+              </p>
+              <p className="text-sm text-yellow-700 dark:text-yellow-500 mt-1">
+                Submitted: {new Date(pendingRequest.RequestedAt).toLocaleDateString()}
+              </p>
+            </div>
+            <button
+              onClick={handleCancelRequest}
+              className="text-sm text-yellow-800 dark:text-yellow-400 underline hover:no-underline"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Profile Info */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <h2 className="text-xl font-bold dark:text-white mb-4">Personal Information</h2>
         <form onSubmit={handleProfileUpdate} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                First Name
-              </label>
-              <input
-                type="text"
-                value={formData.first_name}
-                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                className={inputClass}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Last Name
-              </label>
-              <input
-                type="text"
-                value={formData.last_name}
-                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                className={inputClass}
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className={inputClass}
+            />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -102,10 +200,14 @@ const Profile = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 bg-[#0BA5EC] text-white rounded-lg hover:bg-[#0BA5EC]/90 font-medium"
+            disabled={submitting || pendingRequest}
+            className="w-full px-4 py-2 bg-[#0BA5EC] text-white rounded-lg hover:bg-[#0BA5EC]/90 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Save Changes
+            {submitting ? 'Submitting...' : pendingRequest ? 'Request Pending' : 'Request Changes'}
           </button>
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+            Profile changes require admin approval
+          </p>
         </form>
       </div>
 

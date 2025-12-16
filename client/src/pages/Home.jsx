@@ -6,7 +6,7 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import ServiceCard from '../components/ServiceCard/ServiceCard';
 import ProviderCard from '../components/ProviderCard/ProviderCard';
 import SEO from '../components/SEO';
-import { getCategories, getServices, getProviders, initializeMockData } from '../utils/mockData';
+import api from '../services/api';
 import homeServiceImage from '../assets/home-service.png';
 import {
   FiDroplet,
@@ -27,6 +27,7 @@ import {
 const categoryIcons = {
   'Plumbing': FiDroplet,
   'Electricity': FiZap,
+  'Electrical': FiZap,
   'Carpentry': FiTool,
   'Painting': FiFeather,
   'Cleaning': FiHome,
@@ -43,20 +44,18 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize mock data if not exists
-    initializeMockData();
-
-    // Simulate API delay
     const fetchData = async () => {
       try {
-        // Fetch data from mock storage
-        const allCategories = getCategories();
-        const allServices = getServices();
-        const allProviders = getProviders();
+        // Fetch from real API
+        const [catRes, svcRes, provRes] = await Promise.all([
+          api.get('/categories'),
+          api.get('/services'),
+          api.get('/providers')
+        ]);
 
-        setCategories(allCategories);
-        setServices(allServices.slice(0, 3)); // Top 3
-        setProviders(allProviders.slice(0, 3)); // Top 3
+        setCategories(catRes.data.categories || []);
+        setServices((svcRes.data.services || []).slice(0, 3)); // Top 3
+        setProviders((provRes.data.providers || []).slice(0, 3)); // Top 3
       } catch (error) {
         console.error('Error fetching home data:', error);
       } finally {
@@ -156,11 +155,11 @@ const Home = () => {
           ) : (
             <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
               {categories.slice(0, 8).map((category) => {
-                const IconComponent = getCategoryIcon(category.name);
+                const IconComponent = getCategoryIcon(category.Name);
                 return (
                   <Link
-                    key={category.category_id}
-                    to={`/services?category=${category.category_id}`}
+                    key={category.CategoryID}
+                    to={`/services?category=${category.CategoryID}`}
                     className="group relative bg-white dark:bg-gray-800 rounded-2xl p-8 text-center hover:shadow-2xl transition-all duration-500 cursor-pointer border-2 border-transparent hover:border-[#0BA5EC]/20 hover:-translate-y-2 overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-[#0BA5EC]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -173,7 +172,7 @@ const Home = () => {
                     </div>
 
                     <h3 className="relative text-base lg:text-lg font-bold dark:text-white group-hover:text-[#0BA5EC] dark:group-hover:text-[#0BA5EC] transition-colors duration-300">
-                      {category.name}
+                      {category.Name}
                     </h3>
 
                     <div className="relative mt-4 inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
