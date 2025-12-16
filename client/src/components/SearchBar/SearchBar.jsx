@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiSearch, FiMapPin, FiChevronDown } from 'react-icons/fi';
-import { getServices, getCategories } from '../../utils/mockData';
+import { getCategories } from '../../utils/mockData';
 
 // Static location data for Lebanon - Baalbek-Hermel region
 const LOCATIONS = [

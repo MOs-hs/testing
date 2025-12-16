@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getServices, getCategories, getProviders, getUsers, deleteService, updateService, initializeMockData, createNotification } from '../../utils/mockData';
-import { FiEdit, FiTrash2, FiSearch, FiMessageSquare } from 'react-icons/fi';
+import { getServices, getCategories, getProviders, getUsers, deleteService, initializeMockData, createNotification } from '../../utils/mockData';
+import { FiTrash2, FiSearch, FiMessageSquare } from 'react-icons/fi';
 
 const Services = () => {
   const [services, setServices] = useState([]);
