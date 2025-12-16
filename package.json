@@ -1,0 +1,21 @@
+{
+    "name": "khadamati-fullstack",
+    "version": "1.0.0",
+    "description": "Khadamati - Full-stack home services platform",
+    "scripts": {
+        "client": "cd client && npm start",
+        "server": "cd backend && npm run dev",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "install-all": "npm install && cd client && npm install && cd ../backend && npm install"
+    },
+    "keywords": [
+        "khadamati",
+        "home-services",
+        "fullstack"
+    ],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}

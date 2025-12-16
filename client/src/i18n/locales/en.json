@@ -1,0 +1,360 @@
+{
+  "common": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "search": "Search",
+    "searchPlaceholder": "Search for services...",
+    "showServicesNearMe": "Show Services Near Me",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "time": "Time",
+    "details": "Details",
+    "view": "View",
+    "download": "Download",
+    "upload": "Upload",
+    "filter": "Filter",
+    "sort": "Sort",
+    "refresh": "Refresh",
+    "export": "Export",
+    "import": "Import",
+    "settings": "Settings",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "help": "Help",
+    "language": "Language",
+    "theme": "Theme",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+
+  "auth": {
+    "loginTitle": "Login",
+    "registerTitle": "Create New Account",
+    "welcomeBack": "Welcome Back",
+    "joinUs": "Join Us Today",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone Number",
+    "accountType": "Account Type",
+    "customer": "Customer",
+    "provider": "Provider",
+    "admin": "Admin",
+    "loginAs": "Login As",
+    "customerLogin": "Customer Login",
+    "providerLogin": "Provider Login",
+    "adminLogin": "Admin Login",
+    "alreadyHaveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create New Account",
+    "loginError": "Login failed",
+    "registerError": "Failed to create account",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "invalidCredentials": "Invalid email or password",
+    "demoAccount": "Demo Account",
+    "demoCredentials": "admin@khadamati.com / admin123"
+  },
+
+  "provider": {
+    "specialization": "Specialization",
+    "experience": "Experience Description",
+    "experienceOptional": "Experience Description (Optional)",
+    "certificate": "Certificate",
+    "uploadCertificate": "Upload Certificate",
+    "certificateHint": "Upload image or PDF (Max 5 MB)",
+    "myServices": "My Services",
+    "addService": "Add Service",
+    "editService": "Edit Service",
+    "serviceRequests": "Service Requests",
+    "certificates": "Certificates",
+    "reviews": "Reviews",
+    "requests": "Requests",
+    "earnings": "Earnings",
+    "rating": "Rating",
+    "totalEarnings": "Total Earnings",
+    "activeServices": "Active Services",
+    "completedRequests": "Completed Requests",
+    "pendingRequests": "Pending Requests"
+  },
+
+  "dashboard": {
+    "admin": {
+      "title": "Dashboard",
+      "totalUsers": "Total Users",
+      "totalProviders": "Service Providers",
+      "totalServices": "Services",
+      "totalRequests": "Requests",
+      "monthlyStats": "Monthly Statistics",
+      "recentPayments": "Recent Payments",
+      "recentReports": "Recent Reports",
+      "users": "Users",
+      "providers": "Providers",
+      "services": "Services",
+      "categories": "Categories",
+      "requests": "Requests",
+      "payments": "Payments",
+      "reports": "Reports",
+      "notifications": "Notifications",
+      "systemAdmin": "System Admin"
+    },
+    "provider": {
+      "title": "Dashboard",
+      "requests": "Requests",
+      "earnings": "Earnings",
+      "rating": "Rating",
+      "recentRequests": "Recent Requests",
+      "myServices": "My Services",
+      "serviceProvider": "Service Provider"
+    },
+    "customer": {
+      "title": "Dashboard",
+      "totalRequests": "Total Requests",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "recentRequests": "Recent Requests",
+      "viewAll": "View All",
+      "myRequests": "My Requests",
+      "myProfile": "My Profile",
+      "customer": "Customer"
+    }
+  },
+
+  "service": {
+    "title": "Service Title",
+    "description": "Description",
+    "category": "Category",
+    "selectCategory": "Select Category",
+    "price": "Price",
+    "images": "Images",
+    "uploadImages": "Upload Images",
+    "uploadImagesHint": "Upload 3-10 images (Max 5 MB each)",
+    "addService": "Add Service",
+    "editService": "Edit Service",
+    "allServices": "All Services",
+    "noServices": "No services available",
+    "viewDetails": "View Details",
+    "provider": "Provider",
+    "location": "Location",
+    "rating": "Rating",
+    "bookNow": "Book Now",
+    "results": "Search Results",
+    "noResults": "No results found",
+    "filterByCategory": "Filter by Category",
+    "all": "All",
+    "servicePlaceholder": "Search for a service...",
+    "locationPlaceholder": "Enter your location",
+    "selectService": "Select a service",
+    "selectLocation": "Select a location",
+    "searchResults": "Search Results",
+    "foundResults": "Found {{count}} results"
+  },
+
+  "currency": {
+    "lbp": "LBP",
+    "usd": "USD",
+    "lebanesePound": "Lebanese Pound",
+    "dollar": "US Dollar",
+    "switchCurrency": "Switch Currency",
+    "selectCurrency": "Select Currency",
+    "paymentCurrency": "Payment Currency"
+  },
+
+  "location": {
+    "lebanon": "Lebanon",
+    "baalbekHermel": "Baalbek-Hermel",
+    "detectLocation": "Detect My Location",
+    "showOnMap": "Show on Map",
+    "baalbek": "Baalbek",
+    "hermel": "Hermel",
+    "arsal": "Arsal",
+    "rasBaalbek": "Ras Baalbek",
+    "brital": "Brital",
+    "deirElAhmar": "Deir El Ahmar",
+    "labweh": "Labweh",
+    "nabiSheet": "Nabi Sheet"
+  },
+
+  "errors": {
+    "fileTooLarge": "File size exceeds 5 MB",
+    "invalidFileType": "Invalid file type. Please upload image or PDF",
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "invalidPhone": "Invalid phone number",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Please try again",
+    "networkError": "Network error. Please check your connection"
+  },
+
+  "success": {
+    "serviceAdded": "Service added successfully",
+    "serviceUpdated": "Service updated successfully",
+    "certificateUploaded": "Certificate uploaded successfully",
+    "profileUpdated": "Profile updated successfully",
+    "requestSubmitted": "Request submitted successfully",
+    "paymentCompleted": "Payment completed successfully",
+    "changesSaved": "Changes saved successfully"
+  },
+
+  "footer": {
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "followUs": "Follow Us",
+    "allRightsReserved": "All rights reserved",
+    "quickLinks": "Quick Links",
+    "support": "Support",
+    "faq": "FAQ"
+  },
+
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in touch with us",
+    "name": "Name",
+    "message": "Message",
+    "send": "Send Message",
+    "address": "Address",
+    "emailUs": "Email Us",
+    "callUs": "Call Us"
+  },
+
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn more about our platform",
+    "ourMission": "Our Mission",
+    "ourVision": "Our Vision",
+    "ourValues": "Our Values"
+  },
+
+  "payment": {
+    "title": "Payment",
+    "method": "Payment Method",
+    "amount": "Amount",
+    "total": "Total",
+    "payNow": "Pay Now",
+    "processing": "Processing payment...",
+    "selectMethod": "Select payment method",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "billingAddress": "Billing Address",
+    "noPayments": "No payments"
+  },
+
+  "status": {
+    "pending": "Pending",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+
+  "request": {
+    "requestNumber": "Request #{{number}}",
+    "noRequests": "No requests"
+  },
+
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+
+  "reports": {
+    "noReports": "No reports"
+  },
+
+  "categories": {
+    "plumbing": "Plumbing",
+    "electricity": "Electricity",
+    "carpentry": "Carpentry",
+    "painting": "Painting",
+    "cleaning": "Cleaning",
+    "gardening": "Gardening",
+    "appliances": "Appliances Repair",
+    "airConditioning": "Air Conditioning",
+    "moving": "Moving Services",
+    "pestControl": "Pest Control",
+    "viewAll": "View All Categories",
+    "management": "Category Management"
+  },
+
+  "products": {
+    "title": "Products",
+    "allProducts": "All Products",
+    "myProducts": "My Products",
+    "addProduct": "Add Product",
+    "editProduct": "Edit Product",
+    "productName": "Product Name",
+    "productDescription": "Product Description",
+    "productPrice": "Product Price",
+    "productStock": "Stock",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "noProducts": "No products available"
+  },
+
+  "orders": {
+    "title": "Orders",
+    "myOrders": "My Orders",
+    "orderNumber": "Order #{{number}}",
+    "orderDate": "Order Date",
+    "orderStatus": "Order Status",
+    "orderTotal": "Order Total",
+    "noOrders": "No orders found",
+    "viewOrder": "View Order",
+    "newOrder": "New Order",
+    "processing": "Processing",
+    "shipped": "Shipped",
+    "delivered": "Delivered"
+  },
+
+  "home": {
+    "heroTitle": "Reliable Home Services at Your Fingertips",
+    "heroSubtitle": "A platform that simplifies daily home maintenance by providing a safe, modern, and efficient site where users can request reliable home services, track progress, pay securely, and leave reviews.",
+    "topCategories": "Top Categories",
+    "featuredServices": "Featured Services",
+    "viewAllServices": "View All Services",
+    "topProviders": "Top Service Providers",
+    "whyUs": "Why Us",
+    "step1": "Search for Service",
+    "step1Desc": "Enter the required service and your location to find available professionals near you.",
+    "step2": "Book and Schedule",
+    "step2Desc": "Choose the service provider, select a convenient time, and book your service securely.",
+    "step3": "Relax and Rate",
+    "step3Desc": "The trusted professional completes the task. Pay securely and leave a rating.",
+    "howItWorks": "How It Works",
+    "getStarted": "Get Started"
+  }
+}

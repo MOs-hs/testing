@@ -1,0 +1,18 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin and dashboard pages from search engines
+Disallow: /admin/
+Disallow: /provider/
+Disallow: /customer/
+Disallow: /login
+Disallow: /register
+
+# Allow public pages
+Allow: /about
+Allow: /contact
+Allow: /services
+
+Sitemap: https://yourdomain.com/sitemap.xml
+

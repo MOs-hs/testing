@@ -1,0 +1,5 @@
+ProviderID int(11) NO
+UserID int(11) NO
+Specialization varchar(255) YES
+Rating decimal(3,2) YES
+TotalReviews int(11) YES
