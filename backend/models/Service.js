@@ -99,10 +99,50 @@ class Service {
         return this.findById(serviceId);
     }
 
-    // Delete service
+    // Delete service (with related records to handle FK constraints)
     static async delete(serviceId) {
-        const [result] = await db.query('DELETE FROM service WHERE ServiceID = ?', [serviceId]);
-        return result.affectedRows > 0;
+        const connection = await db.getConnection();
+        try {
+            await connection.beginTransaction();
+
+            // 1. Delete service images
+            await connection.query('DELETE FROM serviceimage WHERE ServiceID = ?', [serviceId]);
+
+            // 2. Get all service requests for this service
+            const [requests] = await connection.query(
+                'SELECT RequestID FROM servicerequest WHERE ServiceID = ?',
+                [serviceId]
+            );
+
+            // 3. Delete reviews linked to those requests
+            if (requests.length > 0) {
+                const requestIds = requests.map(r => r.RequestID);
+                await connection.query(
+                    `DELETE FROM review WHERE RequestID IN (${requestIds.map(() => '?').join(',')})`,
+                    requestIds
+                );
+
+                // 4. Delete payments linked to those requests
+                await connection.query(
+                    `DELETE FROM payment WHERE RequestID IN (${requestIds.map(() => '?').join(',')})`,
+                    requestIds
+                );
+            }
+
+            // 5. Delete service requests
+            await connection.query('DELETE FROM servicerequest WHERE ServiceID = ?', [serviceId]);
+
+            // 6. Finally delete the service
+            const [result] = await connection.query('DELETE FROM service WHERE ServiceID = ?', [serviceId]);
+
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
+        }
     }
 
     // Get services by provider
