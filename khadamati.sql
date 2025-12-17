@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `Phone` varchar(20) DEFAULT NULL,
   `PasswordHash` varchar(255) NOT NULL,
   `Role` enum('customer','provider','admin') NOT NULL DEFAULT 'customer',
+  `ProfileImage` varchar(500) DEFAULT NULL,
   `CreatedAt` datetime DEFAULT current_timestamp(),
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Email` (`Email`),

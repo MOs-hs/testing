@@ -33,9 +33,15 @@ const resetPasswordValidation = [
 ];
 
 // Routes
-const { uploadSingleDocument } = require('../middleware/upload');
+const { uploadImage } = require('../middleware/upload');
 
-router.post('/register', uploadSingleDocument('cv'), registerValidation, authController.register);
+// Multiple file upload for registration (profile image + cv)
+const uploadFields = uploadImage.fields([
+    { name: 'profileImage', maxCount: 1 },
+    { name: 'cv', maxCount: 1 }
+]);
+
+router.post('/register', uploadFields, registerValidation, authController.register);
 router.post('/login', loginValidation, authController.login);
 router.post('/logout', authenticate, authController.logout);
 router.get('/me', authenticate, authController.getCurrentUser);

@@ -9,15 +9,21 @@ const ProviderCard = ({ provider, user }) => {
   const providerId = provider.ProviderID || provider.provider_id;
   const isVerified = provider.Status === 'Approved' || provider.approved;
   const totalReviews = provider.TotalReviews || 0;
+  const profileImage = provider.ProfileImage;
+  const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="h-48 bg-gray-200 dark:bg-gray-700 relative">
-        <img
-          src="/placeholder-user.jpg"
-          alt={name}
-          className="h-full w-full object-cover"
-        />
+      <div className="h-48 bg-gray-200 dark:bg-gray-700 relative flex items-center justify-center">
+        {profileImage ? (
+          <img
+            src={`${baseUrl}/${profileImage}`}
+            alt={name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <span className="text-6xl font-bold text-gray-400">{name.charAt(0)}</span>
+        )}
         {isVerified && (
           <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-full flex items-center gap-1 text-xs">
             <FiCheckCircle className="h-3 w-3" />

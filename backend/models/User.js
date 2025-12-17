@@ -4,15 +4,15 @@ const bcrypt = require('bcryptjs');
 class User {
     // Create new user
     static async create(userData) {
-        const { name, email, phone, password, role } = userData;
+        const { name, email, phone, password, role, profileImage } = userData;
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
 
         const [result] = await db.query(
-            'INSERT INTO user (Name, Email, Phone, PasswordHash, Role) VALUES (?, ?, ?, ?, ?)',
-            [name, email, phone, passwordHash, role || 'customer']
+            'INSERT INTO user (Name, Email, Phone, PasswordHash, Role, ProfileImage) VALUES (?, ?, ?, ?, ?, ?)',
+            [name, email, phone, passwordHash, role || 'customer', profileImage || null]
         );
 
         return result.insertId;
@@ -21,7 +21,7 @@ class User {
     // Find user by ID
     static async findById(userId) {
         const [users] = await db.query(
-            'SELECT UserID, Name, Email, Phone, Role, CreatedAt FROM user WHERE UserID = ?',
+            'SELECT UserID, Name, Email, Phone, Role, ProfileImage, CreatedAt FROM user WHERE UserID = ?',
             [userId]
         );
         return users[0];
@@ -30,8 +30,8 @@ class User {
     // Find user by email (with password for login)
     static async findByEmail(email, includePassword = false) {
         const fields = includePassword
-            ? 'UserID, Name, Email, Phone, PasswordHash, Role, CreatedAt'
-            : 'UserID, Name, Email, Phone, Role, CreatedAt';
+            ? 'UserID, Name, Email, Phone, PasswordHash, Role, ProfileImage, CreatedAt'
+            : 'UserID, Name, Email, Phone, Role, ProfileImage, CreatedAt';
 
         const [users] = await db.query(
             `SELECT ${fields} FROM user WHERE Email = ?`,
@@ -62,7 +62,7 @@ class User {
     static async findAll(page = 1, limit = 10, role = null) {
         const offset = (page - 1) * limit;
 
-        let query = 'SELECT UserID, Name, Email, Phone, Role, CreatedAt FROM user';
+        let query = 'SELECT UserID, Name, Email, Phone, Role, ProfileImage, CreatedAt FROM user';
         const params = [];
 
         if (role) {

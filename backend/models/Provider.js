@@ -16,7 +16,7 @@ class Provider {
     const [providers] = await db.query(`
       SELECT 
         p.ProviderID, p.Specialization, p.Rating, p.TotalReviews, p.Status, p.CVURL,
-        u.UserID, u.Name, u.Email, u.Phone, u.CreatedAt
+        u.UserID, u.Name, u.Email, u.Phone, u.ProfileImage, u.CreatedAt
       FROM provider p
       JOIN user u ON p.UserID = u.UserID
       WHERE p.ProviderID = ?
@@ -30,7 +30,7 @@ class Provider {
     const [providers] = await db.query(`
       SELECT 
         p.ProviderID, p.Specialization, p.Rating, p.TotalReviews, p.Status, p.CVURL,
-        u.UserID, u.Name, u.Email, u.Phone, u.CreatedAt
+        u.UserID, u.Name, u.Email, u.Phone, u.ProfileImage, u.CreatedAt
       FROM provider p
       JOIN user u ON p.UserID = u.UserID
       WHERE p.UserID = ?
@@ -44,7 +44,7 @@ class Provider {
     let query = `
       SELECT 
         p.ProviderID, p.Specialization, p.Rating, p.TotalReviews, p.Status, p.CVURL,
-        u.UserID, u.Name, u.Email, u.Phone, u.CreatedAt
+        u.UserID, u.Name, u.Email, u.Phone, u.ProfileImage, u.CreatedAt
       FROM provider p
       JOIN user u ON p.UserID = u.UserID
       WHERE 1=1

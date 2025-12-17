@@ -41,8 +41,14 @@ exports.register = async (req, res, next) => {
             }
         }
 
+        // Get profile image URL if uploaded
+        let profileImage = null;
+        if (req.files && req.files.profileImage && req.files.profileImage[0]) {
+            profileImage = req.files.profileImage[0].path.replace(/\\/g, '/');
+        }
+
         // Create user
-        userId = await User.create({ name, email, phone, password, role });
+        userId = await User.create({ name, email, phone, password, role, profileImage });
         logger.info('User created successfully', { userId, email, role });
 
         // Create role-specific record
@@ -51,7 +57,10 @@ exports.register = async (req, res, next) => {
                 await Customer.create(userId);
                 logger.info('Customer record created', { userId });
             } else if (role === 'provider') {
-                const cvUrl = req.file ? req.file.path.replace(/\\/g, '/') : null;
+                // Get CV from multi-file upload
+                const cvUrl = req.files && req.files.cv && req.files.cv[0]
+                    ? req.files.cv[0].path.replace(/\\/g, '/')
+                    : null;
                 // Provider status defaults to Pending in DB, but we can be explicit
                 await Provider.create(userId, specialization || null, cvUrl, 'Pending');
                 logger.info('Provider record created', { userId, specialization, status: 'Pending' });

@@ -55,6 +55,8 @@ const ProviderDetails = () => {
     }
 
     const rating = provider.Rating ? parseFloat(provider.Rating) : 0;
+    const profileImage = provider.ProfileImage;
+    const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -66,9 +68,17 @@ const ProviderDetails = () => {
                     <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                         <div className="relative">
                             <div className="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden ring-4 ring-white dark:ring-gray-800 shadow-lg flex items-center justify-center">
-                                <span className="text-4xl font-bold text-gray-400">
-                                    {provider.Name?.charAt(0) || 'P'}
-                                </span>
+                                {profileImage ? (
+                                    <img
+                                        src={`${baseUrl}/${profileImage}`}
+                                        alt={provider.Name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-4xl font-bold text-gray-400">
+                                        {provider.Name?.charAt(0) || 'P'}
+                                    </span>
+                                )}
                             </div>
                             {provider.Status === 'Approved' && (
                                 <div className="absolute bottom-0 right-0 bg-green-500 text-white p-2 rounded-full shadow-lg" title="Verified Provider">
