@@ -260,7 +260,7 @@ const Home = () => {
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {providers.map((provider) => (
                 <ProviderCard
-                  key={provider.provider_id}
+                  key={provider.ProviderID}
                   provider={provider}
                 />
               ))}
