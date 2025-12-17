@@ -101,12 +101,19 @@ const Home = () => {
 
         <div className="relative mx-auto max-w-5xl px-4 text-center z-10">
 
+          {/* Brand Name */}
+          <div className="mb-4 animate-fade-in-up">
+            <span className="text-2xl md:text-3xl font-bold text-[#0BA5EC] tracking-wider uppercase">
+              Khadamati
+            </span>
+          </div>
+
           {/* Hero Title */}
-          <h1 className="mb-6 text-5xl font-black text-white leading-tight md:text-6xl lg:text-7xl animate-fade-in-up">
+          <h1 className="mb-6 text-5xl font-black text-white leading-tight md:text-6xl lg:text-7xl animate-fade-in-up drop-shadow-lg">
             Find the Best Home Services
           </h1>
 
-          <p className="mx-auto mb-12 max-w-2xl text-lg text-gray-300 dark:text-gray-400 leading-relaxed md:text-xl animate-fade-in-up animation-delay-2000">
+          <p className="mx-auto mb-12 max-w-2xl text-lg text-white/90 leading-relaxed md:text-xl animate-fade-in-up animation-delay-2000 drop-shadow-md">
             Connect with trusted professionals for all your home maintenance needs. Fast, reliable, and secure.
           </p>
 
